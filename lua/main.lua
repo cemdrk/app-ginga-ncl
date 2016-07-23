@@ -45,21 +45,36 @@ function dibujar_titulo()
   -- canvas:flush()
 end
 
-function dibujar_provincias( state )
-  canvas:attrColor('red')
-  canvas:attrFont('Tiresias', 15, 'bold')
-  canvas:drawText(10, 30, 'se inicio la aplicacion ')
-  canvas:attrColor('black')
-  
-end
+-- function dibujar_provincias( state )
+--   canvas:attrColor('red')
+--   canvas:attrFont('Tiresias', 15, 'bold')
+--   canvas:drawText(10, 30, 'se inicio la aplicacion ')
+--   canvas:attrColor('black')
 
+-- end
+
+-- function obtener_tamanio( arreglo )
+--   for i=1,arreglo do
+--     print(i)
+--   end
+-- end
 function reset_vars()
   
 end
+-- Esta funcion dibujara todas las provincias
+function dibujar_provincias()
+  canvas: attrColor('red')
+  canvas:attrFont('Tiresias', 15, 'bold')
+  canvas:drawText(10, 0, #provincias)
+  canvas:attrColor('black')
+end
+
 -- dibujar todo
 function draw()
   canvas:clear()
-  dibujar_titulo()
+  -- dibujar_titulo()
+  dibujar_provincias()
+  -- dibujar_seleccion(estado_provincias)
   canvas:flush()
   -- canvas:flush()
 end
