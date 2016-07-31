@@ -79,6 +79,7 @@ function dibujar_provincias()
       canvas:drawText(5,cont,provincias[i])
     end 
     cont=cont + (0.05 * SCREEN_H)
+    canvas:attrColor('black')
   end
   
 end
@@ -121,6 +122,15 @@ function actualizar_vista()
   canvas:flush()
 end
 
+function mover( value )
+  if value == -1 then
+    estado_provincias = estado_provincias - 1
+    draw()
+  else
+    estado_provincias = estado_provincias + 1
+    draw()
+  end
+end
 -- function eventos de teclado
 function onkeyPress( evt )
   -- canvas:clear()
@@ -131,10 +141,10 @@ function onkeyPress( evt )
       seleccionar_plato()
     elseif evt.key == 'YELLOW' then
       volver_anterior()
-    -- elseif evt.key == 'CURSOR_UP' then
-    --   mover(1)
-    -- elseif evt.key == 'CURSOR_DOWN' then
-    --   mover(-1)
+    elseif evt.key == 'CURSOR_UP' then
+      mover(-1)
+    elseif evt.key == 'CURSOR_DOWN' then
+      mover(1)
     end
     actualizar_vista()
   end
