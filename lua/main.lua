@@ -63,16 +63,30 @@ function reset_vars()
 end
 -- Esta funcion dibujara todas las provincias
 function dibujar_provincias()
-  canvas: attrColor('red')
-  canvas:attrFont('Tiresias', 15, 'bold')
-  canvas:drawText(10, 0, #provincias)
-  canvas:attrColor('black')
+  cont = 0.1 * SCREEN_H
+  for i=1,#provincias do
+    if estado_provincias == i then
+      canvas:attrColor(72,112,156,255)
+      canvas:drawRect('fill', 0, cont, 0.25 * SCREEN_W, 0.04 * SCREEN_H)
+      canvas: attrColor('white')
+      canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+      canvas:drawText(5,cont,provincias[i])
+    else
+      canvas:attrColor(73,143,143,255)
+      canvas:drawRect('fill', 0, cont, 0.25 * SCREEN_W, 0.04 * SCREEN_H)
+      canvas: attrColor('white')
+      canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+      canvas:drawText(5,cont,provincias[i])
+    end 
+    cont=cont + (0.05 * SCREEN_H)
+  end
+  
 end
 
 -- dibujar todo
 function draw()
   canvas:clear()
-  -- dibujar_titulo()
+  dibujar_titulo()
   dibujar_provincias()
   -- dibujar_seleccion(estado_provincias)
   canvas:flush()
