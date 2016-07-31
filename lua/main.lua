@@ -101,6 +101,7 @@ function seleccionar_provincia()
   if estado_menu == 2 or estado_menu == 3 then
     cont = 0.1 * SCREEN_H
     for i=1,#platos do
+      local plato_seleccionado = platos[i]
       if estado_platos == i then
         canvas:attrColor(72,112,156,255)
         canvas:drawRect('fill', 0.30 * SCREEN_W , cont, 0.25 * SCREEN_W, 0.04 * SCREEN_H)
@@ -121,25 +122,18 @@ function seleccionar_provincia()
 end
 -- funcion para seleccionar un plato
 function seleccionar_plato()
+  cont = 0.1 * SCREEN_H
   if estado_menu == 2 then
-    cont = 0.1 * SCREEN_H
-    for i=1,#platos do
-      if estado_platos == i then
-        canvas:attrColor(72,112,156,255)
-        canvas:drawRect('fill', 0.60 * SCREEN_W , cont, 0.25 * SCREEN_W, 0.04 * SCREEN_H)
-        canvas: attrColor('white')
-        canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-        canvas:drawText(0.63 * SCREEN_W,cont,platos[i])
-      else
-        canvas:attrColor(73,143,143,255)
-        canvas:drawRect('fill', 0.60 * SCREEN_W, cont, 0.25 * SCREEN_W, 0.04 * SCREEN_H)
-        canvas: attrColor('white')
-        canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-        canvas:drawText(0.63 * SCREEN_W,cont,platos[i])
-      end
-      cont = cont + (0.05 * SCREEN_H)
-      canvas:attrColor('black')
-    end
+    canvas:attrColor(76, 142, 166, 255)
+    canvas:drawRect('fill', 0.60 * SCREEN_W , cont, 0.39 * SCREEN_W, 0.8 * SCREEN_H)
+    canvas: attrColor('white')
+    canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+    canvas:drawText(0.63 * SCREEN_W,cont,'Silpancho')
+    canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+    canvas:drawText(0.63 * SCREEN_W,0.5 * SCREEN_H,'Ingredientes: ')
+    canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+    canvas:drawText(0.63 * SCREEN_W,0.8 * SCREEN_H ,'Preparacion: ')
+    canvas:attrColor('black')
   end
 end
 -- funcion para seleccionar un plato
@@ -181,10 +175,8 @@ function onkeyPress( evt )
     if evt.key == 'RED' then
       estado_menu = 2
       seleccionar_provincia()
-    elseif evt.key == 'GREEN' then
-      estado_menu = 3
       seleccionar_plato()
-    elseif evt.key == 'YELLOW' then
+    elseif evt.key == 'GREEN' then
       estado_menu = 1
       volver_anterior()
     elseif evt.key == 'CURSOR_UP' then
@@ -192,7 +184,7 @@ function onkeyPress( evt )
     elseif evt.key == 'CURSOR_DOWN' then
       mover(1)
     end
-    draw()
+    actualizar_vista()
   end
   return true
 end
