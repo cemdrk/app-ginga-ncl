@@ -10,6 +10,7 @@ local offset = 5 -- separacion entre bloques
 local estado_provincias = 1 -- posicion del array seleccionado
 local estado_platos = 1 -- posicion de los platos seleccionados
 local estado_descripcion = 1 -- estado de la descripcion
+local estado_menu = 1
 -- local EMPTY = 0
 -- local SELECTED = 1
 -- local estado = 0
@@ -95,11 +96,24 @@ function draw()
 end
 -- funcion para seleccionar una provincia
 function seleccionar_provincia()
-  -- canvas:clear()
-  canvas:attrColor('red')
-  canvas:attrFont('Tiresias', 15, 'bold')
-  canvas:drawText(10, 30, 'se selecciono una provincia')
-  canvas:attrColor('black')
+  cont = 0.1 * SCREEN_H
+  for i=1,#platos do
+    if estado_platos == i then
+      canvas:attrColor(72,112,156,255)
+      canvas:drawRect('fill', 0.30 * SCREEN_W , cont, 0.25 * SCREEN_W, 0.04 * SCREEN_H)
+      canvas: attrColor('white')
+      canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+      canvas:drawText(0.33 * SCREEN_W,cont,platos[i])
+    else
+      canvas:attrColor(73,143,143,255)
+      canvas:drawRect('fill', 0.30 * SCREEN_W, cont, 0.25 * SCREEN_W, 0.04 * SCREEN_H)
+      canvas: attrColor('white')
+      canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+      canvas:drawText(0.33 * SCREEN_W,cont,platos[i])
+    end
+    cont = cont + (0.05 * SCREEN_H)
+    canvas:attrColor('black')
+  end
 end
 -- funcion para seleccionar un plato
 function seleccionar_plato()
