@@ -1,4 +1,4 @@
-local provincias = { 'Arque', 'Mizque', 'Aniceto Arce', 'Tiraque', 'Punata' }
+local provincias = { "Arani","Arque","Ayopaya","Bolivar","Carrasco","Capinota", "Campero","Cercado","Chapare","Esteban Arce","German Jordan","Mizque", "Punata","QUillacollo","Tapacari","Tiraque"}
 local platos = { 'Silpancho', 'Pique Macho', 'Milaneza', 'Falso Conejo', 'Picante de Pollo' }
 -- desc_plato = {'', '', '', '', '', ''}
 local desc_plato = 'Este es un texto de prueba'
@@ -10,7 +10,7 @@ local offset = 5 -- separacion entre bloques
 local estado_provincias = 1 -- posicion del array seleccionado
 local estado_platos = 1 -- posicion de los platos seleccionados
 local estado_descripcion = 1 -- estado de la descripcion
-local estado_menu = 1
+local estado_menu = 1 -- bandera del menu para el movimiento de las teclas
 -- local EMPTY = 0
 -- local SELECTED = 1
 -- local estado = 0
@@ -90,77 +90,109 @@ function draw()
   canvas:clear()
   dibujar_titulo()
   dibujar_provincias()
+  seleccionar_provincia()
+  seleccionar_plato()
   -- dibujar_seleccion(estado_provincias)
   canvas:flush()
   -- canvas:flush()
 end
 -- funcion para seleccionar una provincia
 function seleccionar_provincia()
-  cont = 0.1 * SCREEN_H
-  for i=1,#platos do
-    if estado_platos == i then
-      canvas:attrColor(72,112,156,255)
-      canvas:drawRect('fill', 0.30 * SCREEN_W , cont, 0.25 * SCREEN_W, 0.04 * SCREEN_H)
-      canvas: attrColor('white')
-      canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-      canvas:drawText(0.33 * SCREEN_W,cont,platos[i])
-    else
-      canvas:attrColor(73,143,143,255)
-      canvas:drawRect('fill', 0.30 * SCREEN_W, cont, 0.25 * SCREEN_W, 0.04 * SCREEN_H)
-      canvas: attrColor('white')
-      canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-      canvas:drawText(0.33 * SCREEN_W,cont,platos[i])
+  if estado_menu == 2 or estado_menu == 3 then
+    cont = 0.1 * SCREEN_H
+    for i=1,#platos do
+      if estado_platos == i then
+        canvas:attrColor(72,112,156,255)
+        canvas:drawRect('fill', 0.30 * SCREEN_W , cont, 0.25 * SCREEN_W, 0.04 * SCREEN_H)
+        canvas: attrColor('white')
+        canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+        canvas:drawText(0.33 * SCREEN_W,cont,platos[i])
+      else
+        canvas:attrColor(73,143,143,255)
+        canvas:drawRect('fill', 0.30 * SCREEN_W, cont, 0.25 * SCREEN_W, 0.04 * SCREEN_H)
+        canvas: attrColor('white')
+        canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+        canvas:drawText(0.33 * SCREEN_W,cont,platos[i])
+      end
+      cont = cont + (0.05 * SCREEN_H)
+      canvas:attrColor('black')
     end
-    cont = cont + (0.05 * SCREEN_H)
-    canvas:attrColor('black')
   end
 end
 -- funcion para seleccionar un plato
 function seleccionar_plato()
-  -- canvas:clear()
-  canvas:attrColor('red')
-  canvas:attrFont('Tiresias', 15, 'bold')
-  canvas:drawText(10, 60, 'se selecciono un plato')
-  canvas:attrColor('black')
+  if estado_menu == 2 then
+    cont = 0.1 * SCREEN_H
+    for i=1,#platos do
+      if estado_platos == i then
+        canvas:attrColor(72,112,156,255)
+        canvas:drawRect('fill', 0.60 * SCREEN_W , cont, 0.25 * SCREEN_W, 0.04 * SCREEN_H)
+        canvas: attrColor('white')
+        canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+        canvas:drawText(0.63 * SCREEN_W,cont,platos[i])
+      else
+        canvas:attrColor(73,143,143,255)
+        canvas:drawRect('fill', 0.60 * SCREEN_W, cont, 0.25 * SCREEN_W, 0.04 * SCREEN_H)
+        canvas: attrColor('white')
+        canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+        canvas:drawText(0.63 * SCREEN_W,cont,platos[i])
+      end
+      cont = cont + (0.05 * SCREEN_H)
+      canvas:attrColor('black')
+    end
+  end
 end
 -- funcion para seleccionar un plato
 function volver_anterior()
-  -- canvas:clear()
-  canvas:attrColor('red')
-  canvas:attrFont('Tiresias', 15, 'bold')
-  canvas:drawText(10, 90, 'se volvio a un estado anterior')
-  canvas:attrColor('black')
+  -- body
 end
 -- funcion para actualizar un plato
 function actualizar_vista()
+  canvas:flush()
   canvas:flush()
 end
 
 function mover( value )
   if value == -1 then
-    estado_provincias = estado_provincias - 1
-    draw()
+    if estado_menu == 1 then
+      estado_provincias = estado_provincias - 1
+    elseif estado_menu == 2 then
+      estado_platos = estado_platos - 1
+    elseif estado_menu == 3 then
+      estado_descripcion = estado_descripcion - 1
+    end
+    -- draw()
   else
-    estado_provincias = estado_provincias + 1
-    draw()
+    if estado_menu == 1 then
+      estado_provincias = estado_provincias + 1
+    elseif estado_menu == 2 then
+      estado_platos = estado_platos + 1
+    elseif estado_menu == 3 then
+      estado_descripcion = estado_descripcion + 1
+    end
+    -- draw()
   end
+  draw()
 end
 -- function eventos de teclado
 function onkeyPress( evt )
   -- canvas:clear()
   if evt.class == 'key' and evt.type == 'press' then
     if evt.key == 'RED' then
+      estado_menu = 2
       seleccionar_provincia()
     elseif evt.key == 'GREEN' then
+      estado_menu = 3
       seleccionar_plato()
     elseif evt.key == 'YELLOW' then
+      estado_menu = 1
       volver_anterior()
     elseif evt.key == 'CURSOR_UP' then
       mover(-1)
     elseif evt.key == 'CURSOR_DOWN' then
       mover(1)
     end
-    actualizar_vista()
+    draw()
   end
   return true
 end
