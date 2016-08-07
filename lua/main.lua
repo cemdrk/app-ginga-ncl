@@ -1,3 +1,5 @@
+require 'tcp'
+
 local provincias = { "Arani","Arque","Ayopaya","Bolivar","Carrasco","Capinota", "Campero","Cercado","Chapare","Esteban Arce","German Jordan","Mizque", "Punata","QUillacollo","Tapacari","Tiraque"}
 local platos = { 'Silpancho', 'Pique Macho', 'Milaneza', 'Falso Conejo', 'Picante de Pollo' }
 -- desc_plato = {'', '', '', '', '', ''}
@@ -11,6 +13,12 @@ local estado_provincias = 1 -- posicion del array seleccionado
 local estado_platos = 1 -- posicion de los platos seleccionados
 local estado_descripcion = 1 -- estado de la descripcion
 local estado_menu = 1 -- bandera del menu para el movimiento de las teclas
+
+local HOST = 'localhost' -- Host a conectarse
+local url = '/bolivianfood/list.php' -- Pagina solicitada
+local result = '' -- resultado html de la busqueda
+local question = '' -- 
+local i = 1
 -- local EMPTY = 0
 -- local SELECTED = 1
 -- local estado = 0
@@ -39,9 +47,10 @@ function init()
 end
 
 function dibujar_titulo()
+  getTCP()
   canvas:attrColor('red')
   canvas:attrFont('Tiresias', 15, 'bold')
-  canvas:drawText(10, 0, 'se inicio la aplicacion ')
+  canvas:drawText(10, 0, 'se inicio la aplicacion '..question)
   canvas:attrColor('black')
   -- canvas:flush()
 end
@@ -187,6 +196,22 @@ function onkeyPress( evt )
     actualizar_vista()
   end
   return true
+end
+
+function getTCP()
+  tcp.execute(
+    function ()
+      tcp.connect(HOST, 80)
+      tcp.send('GET '..url..'\n')
+      result = tcp.receive()
+      if result then
+        _,_,question = string.find(result, '<plato'..i..'>(.*)</plato'..i..'>')
+        i = i+1
+      else
+        _,_,question = 'error'.. evt.error
+      end
+    end
+  )
 end
 
 function handler( evt )
