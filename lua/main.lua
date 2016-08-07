@@ -1,7 +1,7 @@
 require 'tcp'
 
-local provincias = { "Arani","Arque","Ayopaya","Bolivar","Carrasco","Capinota", "Campero","Cercado","Chapare","Esteban Arce","German Jordan","Mizque", "Punata","QUillacollo","Tapacari","Tiraque"}
-local platos = { 'Silpancho', 'Pique Macho', 'Milaneza', 'Falso Conejo', 'Picante de Pollo' }
+local provincias = { "Arani","Arque","Ayopaya","Bolivar","Carrasco","Capinota", "Campero","Cercado","Chapare","Esteban Arce","German Jordan","Mizque", "Punata","Quillacollo","Tapacari","Tiraque"}
+-- local platos = { 'Silpancho', 'Pique Macho', 'Milaneza', 'Falso Conejo', 'Picante de Pollo' }
 -- desc_plato = {'', '', '', '', '', ''}
 local desc_plato = 'Este es un texto de prueba'
 
@@ -18,7 +18,10 @@ local HOST = 'localhost' -- Host a conectarse
 local url = '/bolivianfood/list.php' -- Pagina solicitada
 local result = '' -- resultado html de la busqueda
 local question = '' -- 
-local i = 1
+local platos = {}
+local titulo = '' -- titulo del plato
+local descripcion = '' -- descripcion del plato
+-- local i = 1
 -- local EMPTY = 0
 -- local SELECTED = 1
 -- local estado = 0
@@ -47,10 +50,9 @@ function init()
 end
 
 function dibujar_titulo()
-  getTCP()
   canvas:attrColor('red')
   canvas:attrFont('Tiresias', 15, 'bold')
-  canvas:drawText(10, 0, 'se inicio la aplicacion '..question)
+  canvas:drawText(10, 0, 'se inicio la aplicacion ')
   canvas:attrColor('black')
   -- canvas:flush()
 end
@@ -107,6 +109,7 @@ function draw()
 end
 -- funcion para seleccionar una provincia
 function seleccionar_provincia()
+  getTCP()
   if estado_menu == 2 or estado_menu == 3 then
     cont = 0.1 * SCREEN_H
     for i=1,#platos do
@@ -201,12 +204,18 @@ end
 function getTCP()
   tcp.execute(
     function ()
+      local size = 0;
       tcp.connect(HOST, 80)
       tcp.send('GET '..url..'\n')
       result = tcp.receive()
       if result then
-        _,_,question = string.find(result, '<plato'..i..'>(.*)</plato'..i..'>')
-        i = i+1
+        _,_,size = string.find(result, '<tam>(.*)</tam>')
+        -- size = toNumber(size)
+        for i=1,size do
+          _,_,platos[i] = string.find(result, '<plato'..i..'>(.*)</plato'..i..'>')  
+        end
+        -- _,_,question = string.find(result, '<plato'..i..'>(.*)</plato'..i..'>')
+        -- i = i+1
       else
         _,_,question = 'error'.. evt.error
       end
