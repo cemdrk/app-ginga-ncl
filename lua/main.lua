@@ -18,9 +18,10 @@ local HOST = 'localhost' -- Host a conectarse
 local url = '/bolivianfood/list.php' -- Pagina solicitada
 local result = '' -- resultado html de la busqueda
 local question = '' -- 
-local platos = {}
-local titulo = '' -- titulo del plato
-local descripcion = '' -- descripcion del plato
+local platos = {} -- nombre del plato
+local ingrediente = {} -- ingrediente del plato
+local descripcion = {} -- descripcion del plato
+local preparacion = {} -- preparacion del plato
 -- local i = 1
 -- local EMPTY = 0
 -- local SELECTED = 1
@@ -140,7 +141,9 @@ function seleccionar_plato()
     canvas:drawRect('fill', 0.60 * SCREEN_W , cont, 0.39 * SCREEN_W, 0.8 * SCREEN_H)
     canvas: attrColor('white')
     canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-    canvas:drawText(0.63 * SCREEN_W,cont,'Silpancho')
+    canvas:drawText(0.63 * SCREEN_W,cont,platos[estado_platos])
+    canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+    canvas:drawText(0.63 * SCREEN_W,0.25 * SCREEN_H,descripcion[estado_platos])
     canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
     canvas:drawText(0.63 * SCREEN_W,0.5 * SCREEN_H,'Ingredientes: ')
     canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
@@ -212,7 +215,10 @@ function getTCP()
         _,_,size = string.find(result, '<tam>(.*)</tam>')
         -- size = toNumber(size)
         for i=1,size do
-          _,_,platos[i] = string.find(result, '<plato'..i..'>(.*)</plato'..i..'>')  
+          _,_,platos[i] = string.find(result, '<plato'..i..'>(.*)</plato'..i..'>')
+          _,_,descripcion[i] = string.find(result, '<description'..i..'>(.*)</description'..i..'>')
+          _,_,ingrediente[i] = string.find(result, '<ingredientes'..i..'>(.*)</ingredientes'..i..'>')
+          _,_,preparacion[i] = string.find(result, '<preparacion'..i..'>(.*)</preparacion'..i..'>')
         end
         -- _,_,question = string.find(result, '<plato'..i..'>(.*)</plato'..i..'>')
         -- i = i+1
