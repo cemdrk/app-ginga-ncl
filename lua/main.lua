@@ -143,11 +143,15 @@ function seleccionar_plato()
     canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
     canvas:drawText(0.63 * SCREEN_W,cont,platos[estado_platos])
     canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-    canvas:drawText(0.63 * SCREEN_W,0.25 * SCREEN_H,descripcion[estado_platos])
+    canvas:drawText(0.63 * SCREEN_W,0.15 * SCREEN_H,'Ingredientes: ')
     canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-    canvas:drawText(0.63 * SCREEN_W,0.5 * SCREEN_H,'Ingredientes: ')
+    canvas:drawText(0.63 * SCREEN_W,0.2 * SCREEN_H,ingrediente[estado_platos])
+    
     canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-    canvas:drawText(0.63 * SCREEN_W,0.8 * SCREEN_H ,'Preparacion: ')
+    canvas:drawText(0.63 * SCREEN_W,0.5 * SCREEN_H ,'Preparacion: ')
+    canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+    canvas:drawText(0.63 * SCREEN_W,0.55 * SCREEN_H , preparacion[estado_platos])
+    
     canvas:attrColor('black')
   end
 end
