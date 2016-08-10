@@ -229,6 +229,7 @@ function getTCP()
       else
         _,_,question = 'error'.. evt.error
       end
+      -- tcp.disconnect()de
     end
   )
 end
