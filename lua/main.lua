@@ -1,6 +1,6 @@
 require 'tcp'
 
-local provincias = { "Arani","Arque","Ayopaya","Bolivar","Carrasco","Capinota", "Campero","Cercado","Chapare","Esteban Arce","German Jordan","Mizque", "Punata","Quillacollo","Tapacari","Tiraque"}
+local provincias = { "Arani","Arque","Ayopaya","Bolivar","Carrasco","Capinota", "Campero","Cercado","Chapare","Esteban Arce","German Jordan","Mizque", "Punata","Quillacollo","Tapacari","Tiraque", "Tips"}
 -- local platos = { 'Silpancho', 'Pique Macho', 'Milaneza', 'Falso Conejo', 'Picante de Pollo' }
 -- desc_plato = {'', '', '', '', '', ''}
 local desc_plato = 'Este es un texto de prueba'
@@ -13,7 +13,7 @@ local estado_provincias = 1 -- posicion del array seleccionado
 local estado_platos = 1 -- posicion de los platos seleccionados
 local estado_descripcion = 1 -- estado de la descripcion
 local estado_menu = 1 -- bandera del menu para el movimiento de las teclas
-
+local estado_detalles = 1 -- estado para controlar los estados del plato
 local HOST = 'localhost' -- Host a conectarse
 local url = '/bolivianfood/list.php' -- Pagina solicitada
 local result = '' -- resultado html de la busqueda
@@ -41,13 +41,7 @@ local preparacion = {} -- preparacion del plato
 counter = 0
 
 function init()
-  -- init provincias
-  -- tableros[1] = {}
-  -- for i=0,4 do
-  --   tableros[1] = {}
-  -- end
   draw()
-  -- canvas:flush()
 end
 
 function dibujar_titulo()
@@ -59,21 +53,6 @@ function dibujar_titulo()
 end
 
 -- function dibujar_provincias( state )
---   canvas:attrColor('red')
---   canvas:attrFont('Tiresias', 15, 'bold')
---   canvas:drawText(10, 30, 'se inicio la aplicacion ')
---   canvas:attrColor('black')
-
--- end
-
--- function obtener_tamanio( arreglo )
---   for i=1,arreglo do
---     print(i)
---   end
--- end
-function reset_vars()
-  
-end
 -- Esta funcion dibujara todas las provincias
 function dibujar_provincias()
   cont = 0.1 * SCREEN_H
@@ -104,7 +83,6 @@ function draw()
   dibujar_provincias()
   seleccionar_provincia()
   seleccionar_plato()
-  -- dibujar_seleccion(estado_provincias)
   canvas:flush()
   -- canvas:flush()
 end
@@ -142,28 +120,30 @@ function seleccionar_plato()
     canvas: attrColor('white')
     canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
     canvas:drawText(0.63 * SCREEN_W,cont,platos[estado_platos])
-    canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-    canvas:drawText(0.63 * SCREEN_W,0.15 * SCREEN_H,'Ingredientes: ')
-    canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-    canvas:drawText(0.63 * SCREEN_W,0.2 * SCREEN_H,ingrediente[estado_platos])
     
-    canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-    canvas:drawText(0.63 * SCREEN_W,0.5 * SCREEN_H ,'Preparacion: ')
-    canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-    canvas:drawText(0.63 * SCREEN_W,0.55 * SCREEN_H , preparacion[estado_platos])
-    
+    if estado_detalles == 1 then
+      canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+      canvas:drawText(0.63 * SCREEN_W,0.15 * SCREEN_H,'Ingredientes: ')
+      canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+      canvas:drawText(0.63 * SCREEN_W,0.2 * SCREEN_H,ingrediente[estado_platos])
+    elseif estado_detalles == 2 then
+      canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+      canvas:drawText(0.63 * SCREEN_W,0.15 * SCREEN_H ,'Preparacion: ')
+      canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+      canvas:drawText(0.63 * SCREEN_W,0.2 * SCREEN_H , preparacion[estado_platos])
+    end
     canvas:attrColor('black')
   end
 end
+
+function cambiar_detalle()
+  if estado_detalles == 2 then
+    estado_detalles = 1
+  else
+    estado_detalles = estado_detalles + 1
+  end
+end
 -- funcion para seleccionar un plato
-function volver_anterior()
-  -- body
-end
--- funcion para actualizar un plato
-function actualizar_vista()
-  canvas:flush()
-  canvas:flush()
-end
 
 function mover( value )
   if value == -1 then
@@ -174,7 +154,6 @@ function mover( value )
     elseif estado_menu == 3 then
       estado_descripcion = estado_descripcion - 1
     end
-    -- draw()
   else
     if estado_menu == 1 then
       estado_provincias = estado_provincias + 1
@@ -183,7 +162,6 @@ function mover( value )
     elseif estado_menu == 3 then
       estado_descripcion = estado_descripcion + 1
     end
-    -- draw()
   end
   draw()
 end
@@ -197,13 +175,16 @@ function onkeyPress( evt )
       seleccionar_plato()
     elseif evt.key == 'GREEN' then
       estado_menu = 1
-      volver_anterior()
+      -- volver_anterior()
+    elseif evt.key == 'YELLOW' then
+      -- estado_detalles = 1
+      cambiar_detalle()
     elseif evt.key == 'CURSOR_UP' then
       mover(-1)
     elseif evt.key == 'CURSOR_DOWN' then
       mover(1)
     end
-    actualizar_vista()
+    draw()
   end
   return true
 end
