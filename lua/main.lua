@@ -45,9 +45,11 @@ function init()
 end
 
 function dibujar_titulo()
-  canvas:attrColor('red')
-  canvas:attrFont('Tiresias', 15, 'bold')
-  canvas:drawText(10, 0, 'se inicio la aplicacion ')
+  canvas:attrColor('white')
+  canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+  canvas:drawText(5, 0, 'PLATOS TIPICOS DE COCHABAMBA')
+  canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
+  canvas:drawText(5, 0.030 * SCREEN_H,'Navegacion: Flecha arriba y abajo. Seleccionar Provincia: Boton Rojo, Rotar:Boton Verde')
   canvas:attrColor('black')
   -- canvas:flush()
 end
@@ -123,14 +125,14 @@ function seleccionar_plato()
     
     if estado_detalles == 1 then
       canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-      canvas:drawText(0.63 * SCREEN_W,0.15 * SCREEN_H,'Ingredientes: ')
+      canvas:drawText(0.60 * SCREEN_W,0.15 * SCREEN_H,'Ingredientes:')
       canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-      canvas:drawText(0.63 * SCREEN_W,0.2 * SCREEN_H,ingrediente[estado_platos])
+      canvas:drawText(0.60 * SCREEN_W,0.2 * SCREEN_H,ingrediente[estado_platos])
     elseif estado_detalles == 2 then
       canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-      canvas:drawText(0.63 * SCREEN_W,0.15 * SCREEN_H ,'Preparacion: ')
+      canvas:drawText(0.60 * SCREEN_W,0.15 * SCREEN_H ,'Preparacion: ')
       canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-      canvas:drawText(0.63 * SCREEN_W,0.2 * SCREEN_H , preparacion[estado_platos])
+      canvas:drawText(0.60 * SCREEN_W,0.2 * SCREEN_H , preparacion[estado_platos])
     end
     canvas:attrColor('black')
   end
