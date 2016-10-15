@@ -18,6 +18,8 @@ local HOST = 'localhost' -- Host a conectarse
 local url = '/bolivianfood/list.php' -- Pagina solicitada
 local result = '' -- resultado html de la busqueda
 local question = '' -- 
+local size = 0;
+local tam = 0;
 local platos = {} -- nombre del plato
 local ingrediente = {} -- ingrediente del plato
 local descripcion = {} -- descripcion del plato
@@ -47,7 +49,8 @@ end
 function dibujar_titulo()
   canvas:attrColor('white')
   canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
-  canvas:drawText(5, 0, 'PLATOS TIPICOS DE COCHABAMBA')
+  -- canvas:drawText(5, 0, 'PLATOS TIPICOS DE COCHABAMBA')
+  canvas:drawText(5, 0, tam)
   canvas:attrFont('Tiresias', 0.025 * SCREEN_H, 'bold')
   canvas:drawText(5, 0.030 * SCREEN_H,'Navegacion: Flecha arriba y abajo. Seleccionar Provincia: Boton Rojo, Rotar:Boton Verde')
   canvas:attrColor('black')
@@ -86,7 +89,7 @@ function draw()
   seleccionar_provincia()
   seleccionar_plato()
   canvas:flush()
-  -- canvas:flush()
+  canvas:flush()
 end
 -- funcion para seleccionar una provincia
 function seleccionar_provincia()
@@ -194,40 +197,48 @@ end
 function getTCP()
   tcp.execute(
     function ()
-      local size = 0;
       tcp.connect(HOST, 80)
       tcp.send('GET '..url..'\n')
       result = tcp.receive()
       if result then
+        -- for j=1,#provincias do
         _,_,size = string.find(result, '<tam>(.*)</tam>')
+        tam = size
+        -- sizeT = toNumber(size)
         -- size = toNumber(size)
         for i=1,size do
           _,_,platos[i] = string.find(result, '<plato'..i..'>(.*)</plato'..i..'>')
-          _,_,descripcion[i] = string.find(result, '<description'..i..'>(.*)</description'..i..'>')
+          -- table.insert(platos, plato)
+          -- _,_,descripcion[i] = string.find(result, '<description'..i..'>(.*)</description'..i..'>')
           _,_,ingrediente[i] = string.find(result, '<ingredientes'..i..'>(.*)</ingredientes'..i..'>')
           _,_,preparacion[i] = string.find(result, '<preparacion'..i..'>(.*)</preparacion'..i..'>')
+          -- if platos[i] == '' then
+          --   break
+          -- end
         end
+        -- end
+        
         -- _,_,question = string.find(result, '<plato'..i..'>(.*)</plato'..i..'>')
         -- i = i+1
       else
         _,_,question = 'error'.. evt.error
       end
-      -- tcp.disconnect()de
+      -- tcp.disconnect()
     end
   )
 end
 
-function handler( evt )
-  counter = counter + 1
-  canvas:clear()
-  canvas:attrColor('red')
-  canvas:attrFont('Tiresias', 15, 'bold')
-    canvas:drawText(10, 0, evt.class or 'no existe clase')
-    canvas:drawText(10, 15, evt.key or 'no existe key')
-    canvas:drawText(10, 30, evt.type or 'no existe tipo')
-    canvas:attrColor('black')
-    canvas:flush()
-end
+-- function handler( evt )
+--   counter = counter + 1
+--   canvas:clear()
+--   canvas:attrColor('red')
+--   canvas:attrFont('Tiresias', 15, 'bold')
+--     canvas:drawText(10, 0, evt.class or 'no existe clase')
+--     canvas:drawText(10, 15, evt.key or 'no existe key')
+--     canvas:drawText(10, 30, evt.type or 'no existe tipo')
+--     canvas:attrColor('black')
+--     canvas:flush()
+-- end
 -- init 
 init()
 -- registrar evento
